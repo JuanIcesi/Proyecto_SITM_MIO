@@ -1,0 +1,25 @@
+# IntelliJ
+.idea/
+*.iml
+
+# Maven
+target/
+
+# IntelliJ build output
+out/
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Zips or compressed files
+*.zip
+
+# --- MIO DATA (archivos pesados) ---
+# Ignora datagrams de history y streaming
+src/data/proyecto-mio/MIO/datagrams4history/
+src/data/proyecto-mio/MIO/datagrams4streaming.csv
+src/data/proyecto-mio/MIO/datagrams4history.zip

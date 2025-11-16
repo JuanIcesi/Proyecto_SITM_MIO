@@ -1,4 +1,4 @@
-package mio.app.app;
+package mio.app;
 
 import mio.model.Route;
 import mio.model.Stop;
@@ -17,9 +17,11 @@ public class Main {
 
     public static void main(String[] args) {
         // 🔧 Ajusta estas rutas a donde tengas los CSV
-        Path linesCsvPath = Path.of("data/lines.csv");
-        Path stopsCsvPath = Path.of("data/stops.csv");
-        Path lineStopsCsvPath = Path.of("data/linestops.csv");
+
+
+        Path linesCsvPath     = Path.of("src/data/proyecto-mio/MIO/lines-241.csv");
+        Path stopsCsvPath     = Path.of("src/data/proyecto-mio/MIO/stops-241.csv");
+        Path lineStopsCsvPath = Path.of("src/data/proyecto-mio/MIO/linestops-241.csv");
 
         RouteLoader routeLoader = new RouteLoader();
         StopLoader stopLoader = new StopLoader();
