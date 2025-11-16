@@ -1,7 +1,7 @@
 package mio.service;
 
 import mio.model.LineStop;
-import mio.util.CsvUtils;
+import mio.Util.CsvUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;

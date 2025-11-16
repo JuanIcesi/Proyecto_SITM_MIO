@@ -1,4 +1,4 @@
-package mio.util;
+package mio.Util;
 
 public class CsvUtils {
 
