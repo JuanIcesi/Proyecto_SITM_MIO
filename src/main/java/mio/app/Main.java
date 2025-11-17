@@ -45,7 +45,9 @@ public class Main {
             graphBuilder.buildAndPrintGraphs(routesById, stopsById, lineStopsByRouteAndOrientation);
 
             System.out.println();
-            System.out.println("Generando imágenes de los grafos con Java2D...");
+            System.out.println("╔═══════════════════════════════════════════════════════════════╗");
+            System.out.println("║ Generando imágenes de los grafos de las rutas individuales... ║");
+            System.out.println("╚═══════════════════════════════════════════════════════════════╝");
             Path graphsDir = Path.of("GrafosRutasIndividuales");
             imageExporter.exportRouteGraphs(
                     routesById,
@@ -53,8 +55,8 @@ public class Main {
                     lineStopsByRouteAndOrientation,
                     graphsDir
             );
-            System.out.println("Imágenes JPG generadas en la carpeta: " + graphsDir.toAbsolutePath());
             
+            System.out.println("\nUbicación: " + graphsDir.toAbsolutePath());
             System.out.println();
             Path fullGraphDir = Path.of("GrafoRutasCompletas");
             imageExporter.exportFullGraph(

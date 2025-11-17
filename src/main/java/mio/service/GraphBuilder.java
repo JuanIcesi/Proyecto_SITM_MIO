@@ -77,12 +77,11 @@ public class GraphBuilder {
             System.out.println();
         }
 
-        System.out.println("=================================================================");
-        System.out.println("RESUMEN");
-        System.out.println("=================================================================");
-        System.out.println("Total de rutas procesadas: " + totalRutas);
-        System.out.println("Total de arcos generados: " + totalArcos);
-        System.out.println("=================================================================");
+        System.out.println("╔═════════════════════════════════╗");
+        System.out.println("║            RESUMEN              ║");
+        System.out.println("╚═════════════════════════════════╝");
+        System.out.println("- Total de rutas procesadas: " + totalRutas);
+        System.out.println("- Total de arcos generados: " + totalArcos);
     }
 
     private List<Arco> buildArcos(List<LineStop> stopsSeq) {
