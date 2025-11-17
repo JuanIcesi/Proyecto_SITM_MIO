@@ -1,5 +1,6 @@
 package mio.model;
 
+// Representa un arco (conexión) entre dos paradas consecutivas
 public class Arco {
     private final int origenStopId;
     private final int destinoStopId;

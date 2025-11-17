@@ -1,12 +1,13 @@
 package mio.model;
 
-public class LineStop {
+// Relación entre una ruta y una parada (con secuencia y orientación)
+public class ParadaRuta {
     private final int lineId;
     private final int stopId;
     private final int sequence;
     private final int orientation;
 
-    public LineStop(int lineId, int stopId, int sequence, int orientation) {
+    public ParadaRuta(int lineId, int stopId, int sequence, int orientation) {
         this.lineId = lineId;
         this.stopId = stopId;
         this.sequence = sequence;
@@ -29,3 +30,4 @@ public class LineStop {
         return orientation;
     }
 }
+

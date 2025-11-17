@@ -1,7 +1,7 @@
 package mio.service;
 
-import mio.model.Stop;
-import mio.Util.CsvUtils;
+import mio.model.Parada;
+import mio.Util.UtilidadesCsv;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,10 +11,11 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
-public class StopLoader {
+// Carga paradas desde archivo CSV
+public class CargadorParadas {
 
-    public Map<Integer, Stop> loadStops(Path path) throws IOException {
-        Map<Integer, Stop> stopsById = new HashMap<>();
+    public Map<Integer, Parada> loadStops(Path path) throws IOException {
+        Map<Integer, Parada> stopsById = new HashMap<>();
 
         try (BufferedReader br = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
             String line;
@@ -31,7 +32,7 @@ public class StopLoader {
                     }
                 }
 
-                String[] parts = CsvUtils.splitCsvLine(line);
+                String[] parts = UtilidadesCsv.splitCsvLine(line);
                 if (parts.length < 8) continue;
 
                 try {
@@ -41,7 +42,7 @@ public class StopLoader {
                     double lon = Double.parseDouble(parts[6].trim());
                     double lat = Double.parseDouble(parts[7].trim());
 
-                    Stop stop = new Stop(stopId, shortName, longName, lat, lon);
+                    Parada stop = new Parada(stopId, shortName, longName, lat, lon);
                     stopsById.put(stopId, stop);
                 } catch (NumberFormatException e) {
                 }
@@ -51,3 +52,4 @@ public class StopLoader {
         return stopsById;
     }
 }
+

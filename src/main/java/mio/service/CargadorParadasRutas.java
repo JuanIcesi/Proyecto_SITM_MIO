@@ -1,7 +1,7 @@
 package mio.service;
 
-import mio.model.LineStop;
-import mio.Util.CsvUtils;
+import mio.model.ParadaRuta;
+import mio.Util.UtilidadesCsv;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,10 +10,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 
-public class LineStopLoader {
+// Carga relaciones ruta-parada desde archivo CSV
+public class CargadorParadasRutas {
 
-    public Map<Integer, Map<Integer, List<LineStop>>> loadLineStops(Path path) throws IOException {
-        Map<Integer, Map<Integer, List<LineStop>>> grouped = new HashMap<>();
+    // Retorna: Map<lineId, Map<orientation, List<ParadaRuta>>>
+    public Map<Integer, Map<Integer, List<ParadaRuta>>> loadLineStops(Path path) throws IOException {
+        Map<Integer, Map<Integer, List<ParadaRuta>>> grouped = new HashMap<>();
 
         try (BufferedReader br = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
             String line;
@@ -23,6 +25,7 @@ public class LineStopLoader {
                 line = line.trim();
                 if (line.isEmpty()) continue;
 
+                // Omite encabezado
                 if (first) {
                     first = false;
                     if (line.toUpperCase().contains("LINESTOP")) {
@@ -30,7 +33,7 @@ public class LineStopLoader {
                     }
                 }
 
-                String[] parts = CsvUtils.splitCsvLine(line);
+                String[] parts = UtilidadesCsv.splitCsvLine(line);
                 if (parts.length < 5) continue;
 
                 try {
@@ -39,8 +42,9 @@ public class LineStopLoader {
                     int lineId = Integer.parseInt(parts[3].trim());
                     int stopId = Integer.parseInt(parts[4].trim());
 
-                    LineStop ls = new LineStop(lineId, stopId, sequence, orientation);
+                    ParadaRuta ls = new ParadaRuta(lineId, stopId, sequence, orientation);
 
+                    // Agrupa por ruta y orientación
                     grouped
                         .computeIfAbsent(lineId, k -> new HashMap<>())
                         .computeIfAbsent(orientation, k -> new ArrayList<>())
@@ -54,3 +58,4 @@ public class LineStopLoader {
         return grouped;
     }
 }
+

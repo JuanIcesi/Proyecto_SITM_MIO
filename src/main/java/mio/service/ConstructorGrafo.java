@@ -1,40 +1,48 @@
 package mio.service;
 
 import mio.model.Arco;
-import mio.model.LineStop;
-import mio.model.Route;
-import mio.model.Stop;
+import mio.model.ParadaRuta;
+import mio.model.Ruta;
+import mio.model.Parada;
 
 import java.util.*;
 
-public class GraphBuilder {
+// Construye grafos a partir de rutas y paradas
+public class ConstructorGrafo {
 
+    // Construye y muestra grafos de todas las rutas
     public void buildAndPrintGraphs(
-            Map<Integer, Route> routesById,
-            Map<Integer, Stop> stopsById,
-            Map<Integer, Map<Integer, List<LineStop>>> lineStopsByRouteAndOrientation
+            Map<Integer, Ruta> routesById,
+            Map<Integer, Parada> stopsById,
+            Map<Integer, Map<Integer, List<ParadaRuta>>> lineStopsByRouteAndOrientation
     ) {
+        // agarro todas las rutas y las ordeno
         List<Integer> lineIds = new ArrayList<>(lineStopsByRouteAndOrientation.keySet());
         Collections.sort(lineIds);
 
         int totalArcos = 0;
         int totalRutas = 0;
 
+        // imprimo el título
         System.out.println("=================================================================");
         System.out.println("GRAFOS DE RUTAS DEL SITM-MIO - LISTA DE ARCOS POR RUTA");
         System.out.println("=================================================================");
         System.out.println();
 
+        // voy ruta por ruta
         for (int lineId : lineIds) {
-            Route route = routesById.get(lineId);
-            Map<Integer, List<LineStop>> byOrientation = lineStopsByRouteAndOrientation.get(lineId);
+            Ruta route = routesById.get(lineId);
+            // las paradas vienen agrupadas por orientación (ida o regreso)
+            Map<Integer, List<ParadaRuta>> byOrientation = lineStopsByRouteAndOrientation.get(lineId);
 
+            // veo qué orientaciones tiene esta ruta (0=ida, 1=regreso)
             List<Integer> orientations = new ArrayList<>(byOrientation.keySet());
             Collections.sort(orientations);
 
             String routeName = (route != null ? route.getShortName() : ("LINEID " + lineId));
             String routeDesc = (route != null ? route.getDescription() : "");
 
+            // muestro info de la ruta
             System.out.println("=================================================================");
             System.out.println("RUTA: " + routeName + " (ID: " + lineId + ")");
             if (!routeDesc.isEmpty()) {
@@ -42,28 +50,34 @@ public class GraphBuilder {
             }
             System.out.println("=================================================================");
 
+            // ahora proceso ida y regreso por separado
             for (int orientation : orientations) {
-                List<LineStop> stopsSeq = new ArrayList<>(byOrientation.get(orientation));
-                stopsSeq.sort(Comparator.comparingInt(LineStop::getSequence));
+                // ordeno las paradas por secuencia (1, 2, 3...)
+                List<ParadaRuta> stopsSeq = new ArrayList<>(byOrientation.get(orientation));
+                stopsSeq.sort(Comparator.comparingInt(ParadaRuta::getSequence));
 
                 String orientationLabel = orientationLabel(orientation);
                 
+                // creo los arcos conectando parada 1->2, 2->3, etc
                 List<Arco> arcos = buildArcos(stopsSeq);
                 totalArcos += arcos.size();
 
+                // muestro info de esta orientación
                 System.out.println();
                 System.out.println("--- " + orientationLabel + " ---");
                 System.out.println("Paradas: " + stopsSeq.size() + " | Arcos: " + arcos.size());
                 System.out.println("Secuencia de arcos:");
 
+                // imprimo cada arco con sus paradas
                 for (int i = 0; i < arcos.size(); i++) {
                     Arco arco = arcos.get(i);
-                    Stop stopFrom = stopsById.get(arco.getOrigenStopId());
-                    Stop stopTo = stopsById.get(arco.getDestinoStopId());
+                    Parada stopFrom = stopsById.get(arco.getOrigenStopId());
+                    Parada stopTo = stopsById.get(arco.getDestinoStopId());
 
                     String fromName = (stopFrom != null ? stopFrom.getShortName() : "N/A");
                     String toName = (stopTo != null ? stopTo.getShortName() : "N/A");
 
+                    // formato: número, IDs, nombres
                     System.out.printf("  %3d. [%d -> %d] %s -> %s%n",
                             i + 1,
                             arco.getOrigenStopId(),
@@ -84,12 +98,15 @@ public class GraphBuilder {
         System.out.println("- Total de arcos generados: " + totalArcos);
     }
 
-    private List<Arco> buildArcos(List<LineStop> stopsSeq) {
+    // creo los arcos: parada 1->2, 2->3, 3->4, etc
+    private List<Arco> buildArcos(List<ParadaRuta> stopsSeq) {
         List<Arco> arcos = new ArrayList<>();
         
+        // voy hasta size-1 porque la última no tiene siguiente
         for (int i = 0; i < stopsSeq.size() - 1; i++) {
-            LineStop from = stopsSeq.get(i);
-            LineStop to = stopsSeq.get(i + 1);
+            ParadaRuta from = stopsSeq.get(i);
+            ParadaRuta to = stopsSeq.get(i + 1);
+            // creo el arco de esta parada a la siguiente
             Arco arco = new Arco(from.getStopId(), to.getStopId());
             arcos.add(arco);
         }
@@ -97,6 +114,7 @@ public class GraphBuilder {
         return arcos;
     }
 
+    // convierto 0 a "IDA" y 1 a "REGRESO"
     private String orientationLabel(int orientation) {
         if (orientation == 0) {
             return "IDA";
@@ -107,3 +125,4 @@ public class GraphBuilder {
         }
     }
 }
+

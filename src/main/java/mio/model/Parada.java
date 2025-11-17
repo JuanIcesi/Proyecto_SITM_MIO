@@ -1,13 +1,14 @@
 package mio.model;
 
-public class Stop {
+// Representa una parada del sistema MIO con coordenadas geográficas
+public class Parada {
     private final int stopId;
     private final String shortName;
     private final String longName;
     private final double lat;
     private final double lon;
 
-    public Stop(int stopId, String shortName, String longName, double lat, double lon) {
+    public Parada(int stopId, String shortName, String longName, double lat, double lon) {
         this.stopId = stopId;
         this.shortName = shortName;
         this.longName = longName;
@@ -35,3 +36,4 @@ public class Stop {
         return lon;
     }
 }
+

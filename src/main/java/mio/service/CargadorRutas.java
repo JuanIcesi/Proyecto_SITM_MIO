@@ -1,7 +1,7 @@
 package mio.service;
 
-import mio.model.Route;
-import mio.Util.CsvUtils;
+import mio.model.Ruta;
+import mio.Util.UtilidadesCsv;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,10 +11,11 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RouteLoader {
+// Carga rutas desde archivo CSV
+public class CargadorRutas {
 
-    public Map<Integer, Route> loadRoutes(Path path) throws IOException {
-        Map<Integer, Route> routesById = new HashMap<>();
+    public Map<Integer, Ruta> loadRoutes(Path path) throws IOException {
+        Map<Integer, Ruta> routesById = new HashMap<>();
 
         try (BufferedReader br = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
             String line;
@@ -31,7 +32,7 @@ public class RouteLoader {
                     }
                 }
 
-                String[] parts = CsvUtils.splitCsvLine(line);
+                String[] parts = UtilidadesCsv.splitCsvLine(line);
                 if (parts.length < 4) continue;
 
                 try {
@@ -39,7 +40,7 @@ public class RouteLoader {
                     String shortName = parts[2].trim();
                     String description = parts[3].trim();
 
-                    Route route = new Route(lineId, shortName, description);
+                    Ruta route = new Ruta(lineId, shortName, description);
                     routesById.put(lineId, route);
                 } catch (NumberFormatException e) {
                 }
@@ -49,3 +50,4 @@ public class RouteLoader {
         return routesById;
     }
 }
+
