@@ -53,8 +53,6 @@ public class GraphImageExporter {
         List<Integer> lineIds = new ArrayList<>(lineStopsByRouteAndOrientation.keySet());
         Collections.sort(lineIds);
 
-        int totalGraphs = 0;
-
         for (int lineId : lineIds) {
             Route route = routesById.get(lineId);
             Map<Integer, List<LineStop>> byOrientation = lineStopsByRouteAndOrientation.get(lineId);
@@ -66,13 +64,11 @@ public class GraphImageExporter {
                 List<LineStop> seq = new ArrayList<>(byOrientation.get(orientation));
                 seq.sort(Comparator.comparingInt(LineStop::getSequence));
 
-                if (exportSingleGraph(route, lineId, orientation, seq, stopsById, outputDir)) {
-                    totalGraphs++;
-                }
+                exportSingleGraph(route, lineId, orientation, seq, stopsById, outputDir);
             }
         }
 
-        System.out.println("✓ Total de imágenes generadas: " + totalGraphs);
+        System.out.println("Grafos individuales generados");
     }
 
     public void exportFullGraph(
@@ -86,7 +82,9 @@ public class GraphImageExporter {
             Files.createDirectories(outputDir);
         }
 
-        System.out.println("Generando grafo completo...");
+        System.out.println("╔══════════════════════════════════════════════════════╗");
+        System.out.println("║ Generando imágen del grafo de las rutas completas... ║");
+        System.out.println("╚══════════════════════════════════════════════════════╝");
 
         List<LineStop> allStopsGlobal = new ArrayList<>();
 
@@ -203,8 +201,9 @@ public class GraphImageExporter {
         Path file = outputDir.resolve("Grafo_Completo_MIO.jpg");
         ImageIO.write(image, "jpg", file.toFile());
 
-        System.out.println("  ✓ Grafo completo generado: " + file.toAbsolutePath());
-        System.out.println("    - Rutas: " + totalRoutes);
+        System.out.println("Grafo completo generado");
+        System.out.println("\nUbicación: " + file.toAbsolutePath());
+        System.out.println("\n    - Rutas: " + totalRoutes);
         System.out.println("    - Paradas únicas: " + drawnStops.size());
         System.out.println("    - Arcos totales: " + totalArcs);
     }
@@ -254,7 +253,6 @@ public class GraphImageExporter {
         Path file = outputDir.resolve(f);
         ImageIO.write(image, "jpg", file.toFile());
 
-        System.out.println("  ✓ " + f);
         return true;
     }
 
