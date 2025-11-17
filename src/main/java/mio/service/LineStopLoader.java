@@ -12,10 +12,6 @@ import java.util.*;
 
 public class LineStopLoader {
 
-    /**
-     * Carga linestops.csv en:
-     * Map<lineId, Map<orientation, List<LineStop>>>
-     */
     public Map<Integer, Map<Integer, List<LineStop>>> loadLineStops(Path path) throws IOException {
         Map<Integer, Map<Integer, List<LineStop>>> grouped = new HashMap<>();
 
@@ -27,7 +23,6 @@ public class LineStopLoader {
                 line = line.trim();
                 if (line.isEmpty()) continue;
 
-                // Encabezado
                 if (first) {
                     first = false;
                     if (line.toUpperCase().contains("LINESTOP")) {
@@ -52,7 +47,6 @@ public class LineStopLoader {
                         .add(ls);
 
                 } catch (NumberFormatException e) {
-                    // ignorar fila inválida
                 }
             }
         }

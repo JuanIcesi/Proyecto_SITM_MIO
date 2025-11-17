@@ -13,9 +13,6 @@ import java.util.Map;
 
 public class StopLoader {
 
-    /**
-     * Carga stops.csv en un mapa: stopId -> Stop
-     */
     public Map<Integer, Stop> loadStops(Path path) throws IOException {
         Map<Integer, Stop> stopsById = new HashMap<>();
 
@@ -27,7 +24,6 @@ public class StopLoader {
                 line = line.trim();
                 if (line.isEmpty()) continue;
 
-                // Encabezado
                 if (first) {
                     first = false;
                     if (line.toUpperCase().contains("STOPID")) {
@@ -48,7 +44,6 @@ public class StopLoader {
                     Stop stop = new Stop(stopId, shortName, longName, lat, lon);
                     stopsById.put(stopId, stop);
                 } catch (NumberFormatException e) {
-                    // ignorar fila inválida
                 }
             }
         }

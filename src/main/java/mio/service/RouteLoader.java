@@ -13,9 +13,6 @@ import java.util.Map;
 
 public class RouteLoader {
 
-    /**
-     * Carga lines.csv en un mapa: lineId -> Route
-     */
     public Map<Integer, Route> loadRoutes(Path path) throws IOException {
         Map<Integer, Route> routesById = new HashMap<>();
 
@@ -27,7 +24,6 @@ public class RouteLoader {
                 line = line.trim();
                 if (line.isEmpty()) continue;
 
-                // Encabezado
                 if (first) {
                     first = false;
                     if (line.toUpperCase().contains("LINEID")) {
@@ -46,7 +42,6 @@ public class RouteLoader {
                     Route route = new Route(lineId, shortName, description);
                     routesById.put(lineId, route);
                 } catch (NumberFormatException e) {
-                    // ignorar fila inválida
                 }
             }
         }
